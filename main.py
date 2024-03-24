@@ -14,6 +14,12 @@ def game():
         #     return sum(cards)
         return number
     
+    def adjust_ace(hand):
+        # Check if there's an Ace in the hand
+        if 11 in hand and sum(hand) > 21:
+            hand.remove(11)
+            hand.append(1)
+    
     
    
     player_hand = []
@@ -31,23 +37,25 @@ def game():
         another_card = input("Do you want to get another card? Type 'y' or 'n': ").lower()
         if another_card == "y":
             player_hand.append(card())
+            adjust_ace(player_hand)
             print(f"Your card is {player_hand} current score is {sum(player_hand)}")
         elif another_card == "n":
             dealer_value = sum(dealer_hand)
             player_value = sum(player_hand)
     
-            if dealer_value < 17:
+            while dealer_value < 17:
                 dealer_hand.append(card())
+                adjust_ace(dealer_hand)  
                 dealer_value = sum(dealer_hand)
         
             print(f"Player = {player_value}")
             print(f"Dealer = {dealer_value} and {dealer_hand}")
-                
-            if player_value == 21:
-                print("You win")
-                black_jack = False
-            elif player_value == dealer_value:
+            
+            if player_value == dealer_value:
                 print("Draw")
+                black_jack = False
+            elif player_value == 21:
+                print("You win")
                 black_jack = False
             elif dealer_value > 21 and player_value <= 22:
                 print("You win")
